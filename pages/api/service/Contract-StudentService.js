@@ -20,20 +20,33 @@ const createContract=(idPhong)=>{
     })
 }
 
-const extendContract=()=>{
-  
-}
 
 const checkForRegistration=()=>{
     return axios.get(API_URL + 'check-registration', { 
       headers: authHeader() 
     });
   }
+
+const cancelContract=()=>{
+    return axios.get(API_URL +"cancel",
+    {
+      headers: authHeader()
+    }
+    )
+}
+const extendContract=()=>{
+  return axios.get(API_URL + "extend",
+  {
+      headers: authHeader()
+  })
+}
 const StudentService={
     getViewBeforeCreateContract,
     createContract,
     checkForRegistration,
     getViewAfterCreatedContract,
+    cancelContract,
+    extendContract,
 }
 
 

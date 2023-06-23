@@ -12,11 +12,11 @@ export default function GreetingUser() {
 
             <div className="flex flex-col justify-between col-span-5 h-full">
                 <p className="text-lg font-bold">
-                    {user.hoTen}
+                    Nguyễn Đăng Bắc
                 </p>
                 <p className="">
                     {/* {user.role ? "Manager Account" : "Student Account"} */}
-                    Student Account
+                    Manager
                 </p>
             </div>
         </section>

@@ -57,12 +57,14 @@ const updateStatusContract=(idContract)=>{
    
     )
 }
+
+
 const MGMTService={
     getListContract,
     getListIdRoom,
     getListTerm,
     searchListContract,
-    updateStatusContract
+    updateStatusContract,
 }
 
 export default MGMTService

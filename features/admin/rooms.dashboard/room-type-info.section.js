@@ -11,7 +11,6 @@ export default function SectionRoomTypeInfo({
     setSectionId,
     handleDeleteRoomType,
 }) {
-
     return (
         <>
             <SectionInfoHeader 
@@ -59,18 +58,18 @@ export default function SectionRoomTypeInfo({
 }
 
 
-function ImageSection({ info: {image, giaPhong}}) {
+function ImageSection({ info}) {
     return (
         <section className="w-full">
             <div className="relative w-10/12 aspect-square">
                 <img
                     className="object-cover rounded-lg"
-                    src={image}
+                    src={info.image}
                     alt="A picture of room"
                 />
             </div>
             <AttributeText title="Cost">
-                <AttributeValue icon={faMoneyBill} value={moneyConverter(giaPhong)} />
+                <AttributeValue icon={faMoneyBill} value={moneyConverter(info.giaPhong)} />
             </AttributeText>
         </section>
     )

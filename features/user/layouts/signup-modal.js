@@ -6,6 +6,7 @@ import InputGroup from "../components/input-group";
 import { faUser, faKey } from "@fortawesome/free-solid-svg-icons"
 import Authentication from "../../../pages/api/student-auth/AuthService"
 // import { url } from "inspector";
+import Spinner from '../../ui/spinner'
 
 export default function SignupForm({
     handlePushPopup, inputOTP, redirect
@@ -14,9 +15,11 @@ export default function SignupForm({
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordError, setPasswordError]= useState(undefined)
-    function handleSubmitSignup(e){
+    const [isLoading, setIsLoading] = useState(false)
+    async function handleSubmitSignup(e){
         e.preventDefault()
-        Authentication.register(id, password).then(res=>{
+        setIsLoading(true)
+        const response = await Authentication.register(id, password).then(res=>{
             handlePushPopup()
             inputOTP({"id":id,"password": password})
             redirect(userURL.login)
@@ -24,20 +27,11 @@ export default function SignupForm({
         .catch((error)=>{
             if( error.response ){
                 setPasswordError(error.response.data)
-                // if(error.response.status===401){
-                    
-                //     setPasswordError('Username or password incorrect')
-                // }
-                // else if(error.response.status===400){
-                //     setPasswordError('Account not accessible')
-                // }
-                // else{
-                //     handlePushPopup()
-                //     inputOTP({"id":id,"password": password})
-                // }
-                // error.response.status===403 ? handlePushPopup() : setPasswordError("aaaa")
+                
             }
           })
+        setIsLoading(false)
+        return response
     }
 
     return (
@@ -77,7 +71,11 @@ export default function SignupForm({
                 handleChange={nextPassword => setConfirmPassword(nextPassword)}
                 error={passwordError}
             /> 
-
+            {isLoading && 
+            <>
+                <Spinner contentIsLoading="Please check your mail"/>
+                <div className="mt-14 text-primary text-center w-full">Please check your mail</div>
+            </>}
             <div className='absolute bottom-0'>
                 <button 
                     className='w-72 py-2 bg-p text-white font-bold rounded-md'>

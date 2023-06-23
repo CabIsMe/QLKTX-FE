@@ -9,7 +9,7 @@ import Authentication from "../../../pages/api/admin-auth/AuthService"
 import {managerURL} from '../../utils/links'
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import Spinner from '../../ui/spinner'
 
 export default function LoginModal({
     handlePushPopup, inputOTP, redirect
@@ -17,7 +17,7 @@ export default function LoginModal({
     const router = useRouter();
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
-
+    const [isLoading, setIsLoading] = useState(false)
     // const [idError, setIdError] = useState(undefined);
     const [passwordError, setPasswordError] = useState(undefined);
 
@@ -31,9 +31,10 @@ export default function LoginModal({
     
 //============ Thay Data
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        Authentication.login(id, password).then(()=>{
+        setIsLoading(true)
+        const response = await Authentication.login(id, password).then(()=>{
             // router.push(managerURL.index)
             handlePushPopup()
             inputOTP({"id":id,"password": password})
@@ -55,6 +56,8 @@ export default function LoginModal({
                 // error.response.status===403 ? handlePushPopup() : setPasswordError("aaaa")
             }
           })
+        setIsLoading(false)
+        return response
         
     }
 //====================== 
@@ -88,6 +91,11 @@ export default function LoginModal({
                 handleChange={nextPassword => setPassword(nextPassword)}
                 error={passwordError}
             />
+            {isLoading && 
+            <>
+                <Spinner contentIsLoading="Please check your mail"/>
+                <div className="mt-10 text-primary text-center w-full">Please check your mail</div>
+            </>}
             
             <div className='absolute bottom-0'>
                 <button 

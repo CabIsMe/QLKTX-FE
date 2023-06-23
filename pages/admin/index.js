@@ -13,17 +13,22 @@ import { managerURL } from "../../features/utils/links";
 export default function Page() {
     const router = useRouter();
     const [authority, setAuthority]= useState(null)
+    const [auth, setAuth] = useState(false)
     function getAuthorities(){
         Authorities().then(res=>{
             console.log(res.data[0])
+            setAuth(true)
             setAuthority(res.data[0]['authority'])
         }).catch(error=>{
-            if(error.response.status==403){
-                router.push(managerURL.login)
-            }
+            // if(error.response.status==403){
+                if(error.response){
+                    router.push(managerURL.login)
+                }
+            // }
         })
     }
 
+    // getAuthorities()
     useEffect(()=>{
         getAuthorities()
     },[authority])
@@ -64,7 +69,7 @@ export default function Page() {
         }, 3000);
     }
     return (
-        // auth &&
+        auth &&
         <>
             <userContext.Provider value={user}>
             <alertContext.Provider value={showAlert}>

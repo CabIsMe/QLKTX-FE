@@ -3,63 +3,86 @@ import FilterBlock from "./block-filter";
 import {SectionContext} from '../../utils/section.context';
 import {DataContext} from '../../utils/data.context';
 import InvoiceListSection from "./section-invoice-list";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import StudentSerivce from "../../../pages/api/service/Invoices-StudentService"
 
-const invoiceData = [
-    {
-        id: "ROOM-001",
-        category: "Room",
-        date: "01-01-2023",
-        status: true,
-        total: 1200000,
-    },
-    {
-        id: "WAT-001",
-        category: "Water",
-        date: "02-02-2023",
-        status: true,
-        total: 50000,
-    },
-    {
-        id: "ELT-001",
-        category: "Electricity",
-        date: "02-02-2023",
-        status: true,
-        total: 50000,
-    },
-    {
-        id: "WAT-002",
-        category: "Water",
-        date: "02-03-2023",
-        status: false,
-        total: 60000,
-    },
-    {
-        id: "ELT-002",
-        category: "Electricity",
-        date: "02-03-2023",
-        status: false,
-        total: 50000,
-    },
-]
+
 
 export default function InvoiceDashboard() {
     const [textFilter, setTextFilter] = useState("");
     const [category, setCategory] = useState("all");
     const [status, setStatus] = useState("all");
-    const invoices = invoiceData.filter(invoice => {
+    const [invoices, setInvoices] = useState([])
+    function mapping(objects){
+        let arr=[]
+        for(let i=0; i<objects.length; i++){
+            const invoice = {
+                id :"",
+                date: "",
+                amount: "",
+                cost: "",
+                total: "",
+                status: "",
+            }
+            if('luongNuocTieuThu' in objects[i]){
+                invoice.id= 'W-'+objects[i].id
+                invoice.amount= objects[i].luongNuocTieuThu
+                invoice.date=objects[i].giaNuocTheoThang.thang + "/" + objects[i].giaNuocTheoThang.nam
+                invoice.cost= objects[i].giaNuocTheoThang.giaNuoc
+            }
+            else{
+                invoice.id= 'E-'+objects[i].id
+                invoice.amount= objects[i].soDienTieuThu
+                invoice.date=objects[i].giaDienTheoThang.thang + "/" + objects[i].giaDienTheoThang.nam
+                invoice.cost= objects[i].giaDienTheoThang.giaDien
+            }
+            invoice.total= objects[i].total
+            invoice.status= objects[i].trangThai
+            arr.push(invoice)
+            
+        }
+        return arr
+    }
 
-        if (category != "all" && invoice.category != category)
-            return false;
+    useEffect(()=>{
+        if (category =='Water'){
+            StudentSerivce.getWaterBills().then(res=>{
+                setInvoices(mapping(res.data))
+            }).catch(error=>{
+                if(error.response){
+                    console.log(error.response.data)
+                }
+            })
+        }
 
-        if (status != "all" && invoice.status.toString() != status)
-            return false;
+        else if (category=='Electricity'){
+            StudentSerivce.getElectricBills().then(res=>{
+                setInvoices(mapping(res.data))
+            }).catch(error=>{
+                if(error.response){
+                    console.log(error.response.data)
+                }
+            })
+        }
         
-        if (!invoice.id.includes(textFilter))
-            return false;
-        
-        return true;
-    })
+        else{
+            
+            StudentSerivce.getWaterBills().then(res=>{
+                
+                StudentSerivce.getElectricBills().then(res2=>{
+                    setInvoices(mapping(res.data.concat(res2.data)))
+                    
+                    
+                })
+            }).catch(error=>{
+                if(error.response){
+                    console.log(error.response.data)
+                }
+            })
+        }
+    },[category])
+
+    
 
     const [section, setSection] = useState(<InvoiceListSection />)
     return (

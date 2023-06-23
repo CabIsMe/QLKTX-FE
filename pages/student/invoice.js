@@ -4,16 +4,30 @@ import StudentNav from '../../features/student/nav';
 import Main from "../../features/layouts/main";
 import Sidebar from "../../features/ui/sidebar";
 import InvoiceDashboard from "../../features/student/dashboard-invoice";
+import { useEffect, useState } from "react";
+import StdService from "../../pages/api/service/Home-StudentService"
 
 export default function Page() {
-    const user = {
-        id: "N19DCCN018", 
-        name: "Nguyen Dang Bac", 
-        role: false, 
-        gender: true,
-        dateOfBirth: '01-01-2001',
-    };
+    const [user, setUser] = useState({})
 
+    function userInfo(){
+        StdService.getStudentDetails().then(res=>{
+            setUser(res.data)
+        }).catch((error)=>{
+            if( error.response ){ 
+                if(error.response.status===401){
+                    console.log("Unauthorized")
+                }
+                else if(error.response.status==403){
+                    router.push(userURL.login)
+                }
+            }
+            
+        })
+    }
+    useEffect(()=>{
+        userInfo()
+    },[])
     const router = useRouter();
     const activeNavID = 1;
 

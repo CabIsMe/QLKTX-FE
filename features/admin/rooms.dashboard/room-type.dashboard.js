@@ -40,9 +40,7 @@ export default function SectionRoomTypes({roomTypes, setRoomTypes}) {
     })
   }
   
-  const roomTypeInfo = roomTypes.find(
-    (roomType) => roomType.id == roomTypeInfoId
-  );
+  
  
 
 
@@ -65,8 +63,8 @@ export default function SectionRoomTypes({roomTypes, setRoomTypes}) {
     }    
 
   }
-  function handleDeleteRoomType(roomTypeId) {
-    MGMTService.deleteTypeRoom(roomTypeId).then(res=>{
+  async function handleDeleteRoomType(roomTypeId) {
+    const response=  await MGMTService.deleteTypeRoom(roomTypeId).then(res=>{
       showAlert(true, 'Delete Successfully')
       loadListTypeRoom()
     }).catch((error)=>{
@@ -75,13 +73,13 @@ export default function SectionRoomTypes({roomTypes, setRoomTypes}) {
           console.log(error.response.data)
     }
     })
+    return response
   }
 
   function handleShowMore() {
     
   }
   async function handleAddingRoomType(data){
-    // console.log(data)
     try{
       const response= await MGMTService.createNewTypeRoom(data)
       loadListTypeRoom()
@@ -99,6 +97,9 @@ export default function SectionRoomTypes({roomTypes, setRoomTypes}) {
     }    
   }
 
+  const roomTypeInfo = roomTypes.find(
+    (roomType) => roomType.id == roomTypeInfoId
+  );
 
   const displaySections = [
     {

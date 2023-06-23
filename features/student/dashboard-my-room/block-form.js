@@ -1,4 +1,4 @@
-import { faAsterisk, faCakeCandles, faCalendar, faCalendarDays, faDiamond, faIdCard, faPhone, faMoneyBill, faSignature, faVenusMars } from "@fortawesome/free-solid-svg-icons"
+import { faAsterisk, faCakeCandles, faCalendar, faCalendarDays, faDiamond, faIdCard, faPhone, faMoneyBill, faSignature, faVenusMars, faMessage } from "@fortawesome/free-solid-svg-icons"
 import Image from "next/image"
 import { useContext, useState, useEffect } from "react"
 import FormInfoBlock from "./block-form-info"
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 
 
 export default function FormBlock({dataContract}) {
+    console.log(dataContract)
     const [readCheckbox, setReadCheckbox] = useState(false);
     const setSection = useContext(SectionContext);
     const router= useRouter()
@@ -43,16 +44,16 @@ export default function FormBlock({dataContract}) {
 
         const roomInfo = [
             {id: 0, name: "Room ID", value: dataContract.hopDongKTX.idPhongKTX, icon: faAsterisk},
-            {id: 1, name: "Type", value: dataContract.loaiKTX.tenLoai, icon: faDiamond},
-            {id: 2, name: "Cost per month", value: dataContract.loaiKTX.giaPhong, icon: faMoneyBill},
+            {id: 1, name: "Type", value: dataContract.nameRoomtype, icon: faDiamond},
+            {id: 2, name: "Cost per month", value: dataContract.price, icon: faMoneyBill},
             // {id: 3, name: "Duration (months)", value: "5", icon: faCalendarDays},
             {id: 3, name: "Date From - Date End", value: dataContract.dateFrom+' - '+dataContract.dateEnd, icon: faCalendar},
         ]
         const personalInfo = [
-            {id: 0, name: "Student ID", value: dataContract.student.username, icon: faIdCard},
-            {id: 1, name: "Full name", value:dataContract.student.hoTen, icon: faSignature},
-            {id: 2, name: "Gender", value: renderGender(dataContract.student.gioiTinh), icon: faVenusMars},
-            {id: 3, name: "Phone", value: dataContract.student.sdt, icon: faPhone},
+            {id: 0, name: "Student ID", value: dataContract.hopDongKTX.mssv, icon: faIdCard},
+            {id: 1, name: "Full name", value:dataContract.fullName, icon: faSignature},
+            {id: 2, name: "Mail", value: dataContract.mail, icon: faMessage},
+            {id: 3, name: "Phone", value: dataContract.phoneNumber, icon: faPhone},
             // {id: 3, name: "mail", value: "ádlkậdlskl;", icon: faCakeCandles},
         ]
         
@@ -97,7 +98,7 @@ export default function FormBlock({dataContract}) {
                             Total cost  
                             <input 
                                 className="w-80 h-12 py-2 pl-5 pr-10 rounded-md font-bold text-center text-xl border-2 bg-white"
-                                value={dataContract.total+'.000 VND'}
+                                value={dataContract.hopDongKTX.tongTien+'.000 VND'}
                                 disabled
                             />
                         </label>
@@ -116,18 +117,4 @@ export default function FormBlock({dataContract}) {
         )
 }
 
-// const roomInfo = [
-//     {id: 0, name: "Room ID", value: "10", icon: faAsterisk},
-//     {id: 1, name: "Type", value: "Standard", icon: faDiamond},
-//     {id: 2, name: "Cost per month", value: "240,000", icon: faMoneyBill},
-//     // {id: 3, name: "Duration (months)", value: "5", icon: faCalendarDays},
-//     {id: 3, name: "Date From - Date End", value: "01/01/2001-01/01/2001", icon: faCalendar},
-// ]
 
-// const personalInfo = [
-//     {id: 0, name: "Student ID", value: "N19DCCN018", icon: faIdCard},
-//     {id: 1, name: "Full name", value: "Nguyen Dang Bac", icon: faSignature},
-//     {id: 2, name: "Gender", value: "Male", icon: faVenusMars},
-//     {id: 3, name: "Birthday", value: "0000", icon: faPhone},
-//     // {id: 3, name: "mail", value: "ádlkậdlskl;", icon: faCakeCandles},
-// ]

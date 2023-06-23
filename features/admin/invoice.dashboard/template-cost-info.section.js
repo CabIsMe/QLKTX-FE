@@ -24,22 +24,27 @@ export default function TemplateCostInfo({
     },[])
 
     function handleChangeCost() {
-        try{
-            ('giaDien' in info) ? 
-            MGMTService.updateCostElectricity(info.id, tempCost).then(res=>{
-                setInfoChanged(true)
-                console.log(res.data)
-            }) :
-            MGMTService.updateCostWater(info.id, tempCost).then(res=>{
-                setInfoChanged(true)
-                console.log(res.data)
-            })
-            showAlert(true, "Change cost successfully!")
-            setSectionId(0);
-        }catch(error){
+        
+        'giaDien' in info ? 
+        (MGMTService.updateCostElectricity(info.id, tempCost).then(res=>{
+            setInfoChanged(true)
+            console.log(res.data)
+        }).catch(error=>{
             showAlert(false, error.response.data)
+            console.log(1234)
             console.log(error.response.data)
-        }
+
+        })) :
+        (MGMTService.updateCostWater(info.id, tempCost).then(res=>{
+            setInfoChanged(true)
+            console.log(res.data)
+        }).catch(error=>{
+            showAlert(false, error.response.data)
+            console.log(1234)
+            console.log(error.response.data)
+        }))
+        showAlert(true, "Change cost successfully!")
+        setSectionId(0);
     
         
     }

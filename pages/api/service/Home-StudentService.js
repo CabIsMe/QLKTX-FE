@@ -5,7 +5,7 @@ const API_URL = "http://localhost:8080/api/student/";
 
 
 const getListTypeRoom=()=> {
-    return axios.get(API_URL + 'room-type', { 
+    return axios.get(API_URL + 'room-type-gender', { 
       headers: authHeader() 
     });
   }
@@ -19,10 +19,6 @@ const getTypeRoom=(id)=>{
     headers: authHeader() 
   });
 }
-
-
-
-
 
 const getStudentDetails=()=>{
   return axios.get(API_URL + 'info', { 

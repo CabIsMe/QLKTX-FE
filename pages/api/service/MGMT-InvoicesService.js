@@ -34,22 +34,23 @@ const getListElectric=(numPage, month, year, status)=>{
 }
 
 const updateElectric=async(id)=>{
-    const response= await axios.patch(API_URL + `invoices/electric/update/${id}`,
-    
+    const response= await axios.patch(API_URL + `invoices/electric/update/${id}`,{},
     {
         headers: authHeader()
     }
     )
+    
     return response
 }
 
 
 const updateWater=async(id)=>{
-    const response= await axios.patch(API_URL + `invoices/water/update/${id}`,
+    const response= await axios.patch(API_URL + `invoices/water/update/${id}`,{},
     {
         headers: authHeader()
     }
     )
+    
     return response
 }
 
@@ -76,7 +77,7 @@ const listElectricPrice=(year)=>{
 }
 
 const updateCostElectricity= async(id, cost)=>{
-    const response= await axios.patch(API_URL+ `price/electric/update/${id}?cost=${cost}`, 
+    const response= await axios.patch(API_URL+ `price/electric/update/${id}?cost=${cost}`, {},
     {
         // params:{
         //     cost: parseFloat(cost)

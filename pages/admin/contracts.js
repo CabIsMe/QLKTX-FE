@@ -13,9 +13,11 @@ import Authorities from "../api/admin-auth/AuthRoles"
 export default function Page() {
     const router = useRouter(); 
     const [authority, setAuthority]= useState(null)
+    const [auth, setAuth] = useState(false)
     function getAuthorities(){
         Authorities().then(res=>{
             console.log(res.data[0])
+            setAuth(true)
             setAuthority(res.data[0]['authority']) 
         }).catch(error=>{
             console.log("error", error);
@@ -64,6 +66,7 @@ export default function Page() {
     }
 
     return (
+        auth &&
         <>
             <userContext.Provider value={user}>
             <alertContext.Provider value={showAlert}>

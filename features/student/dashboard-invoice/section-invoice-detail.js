@@ -4,10 +4,11 @@ import Logo from '../../ui/logo';
 import { useContext } from "react";
 import { SectionContext } from "../../utils/section.context";
 import InvoiceListSection from "./section-invoice-list";
+import { userContext } from "../../user/user.context";
 
-export default function InvoiceDetailSection() {
+export default function InvoiceDetailSection({invoice}) {
     const handleChangeSection = useContext(SectionContext);
-
+    const personalInfo= useContext(userContext)
     return (
         <section className="h-full w-full flex flex-col p-5">
             <nav className="w-full ">
@@ -21,7 +22,7 @@ export default function InvoiceDetailSection() {
             <main className="h-full w-full flex flex-col py-5 px-8 bg-fa rounded-md">
                 <header className="flex items-center justify-between">
                     <Logo />
-                    <span className="text-2xl">invoice</span>
+                    <span className="text-2xl">Invoice</span>
                 </header>
 
                 <section className="mt-4 flex justify-between">
@@ -33,37 +34,39 @@ export default function InvoiceDetailSection() {
                     </div>
 
                     <div className="flex flex-col justify-around items-end">
-                        <p className="underline text-3xl">ROOM-001</p>
-                        <p className=" text-xl">01-01-2023</p>
+                        <p className="underline text-3xl">{invoice.id}</p>
+                        <p className=" text-xl">{invoice.date}</p>
                     </div>
                 </section>
                 
                 <section className="mt-8 h-full grid grid-cols-10 ">
                     <div className="col-span-3">
                         <h4 className="font-bold h-10 flex items-center">Bill to</h4>
-                        <p>Nguyen Dang Bac</p>
-                        <p>0123 123 321</p>
-                        <p>nguyendangbac@gmail.com</p> 
+                        <p>{personalInfo.hoTen}</p>
+                        <p>{personalInfo.sdt}</p>
+                        <p>{personalInfo.mail}</p> 
                     </div>
 
                     <div className="col-span-7"> 
-                        <div className="grid grid-cols-4 items-center h-10 bg-ec">
-                            <p className="col-span-2 px-2">Description</p>
+                        <div className="grid grid-cols-5 items-center h-10 bg-ec">
+                            <p className="col-span-2 px-2">Type</p>
                             <p className="cols-span-1 px-2">Unit cost</p>
                             <p className="cols-span-1 px-2">Amount</p>
+                            <p className="cols-span-1 px-2">Total</p>
                         </div>
 
-                        <div className="grid grid-cols-4 items-center h-10 bg-white">
-                            <p className="col-span-2 px-2">Room</p>
-                            <p className="cols-span-1 px-2">240,000đ x 5</p>
-                            <p className="cols-span-1 px-2">1,200,000đ</p>
+                        <div className="grid grid-cols-5 items-center h-10 bg-white">
+                            <p className="col-span-2 px-2">{invoice.id}</p>
+                            <p className="cols-span-1 px-2">{invoice.cost}</p>
+                            <p className="cols-span-1 px-2">{invoice.amount}</p>
+                            <p className="cols-span-1 px-2">{invoice.total}</p>
                         </div>
 
 
                         <div className="mt-10 grid grid-cols-4 items-center">
                             <p className="col-span-2 "></p>
                             <p className="col-span-1 px-2">Subtotal</p>
-                            <p className="col-span-1 px-2">1,200,000đ</p>
+                            <p className="col-span-1 px-2">{invoice.total}</p>
                         </div>
                         <div className="grid grid-cols-4 items-center">
                             <p className="col-span-2 "></p>
@@ -73,7 +76,7 @@ export default function InvoiceDetailSection() {
                         <div className="grid grid-cols-4 items-center">
                             <p className="col-span-2 "></p>
                             <p className="col-span-1 px-2">Total</p>
-                            <p className="col-span-1 px-2 text-xl font-bold">1,200,000đ</p>
+                            <p className="col-span-1 px-2 text-xl font-bold">{invoice.total}</p>
                         </div>
                     </div>
                 </section>

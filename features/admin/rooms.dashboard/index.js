@@ -106,8 +106,9 @@ function FilterBar({
     setFiltering,
     filtering
 }) {
-
-
+    function gender(gender){
+        return gender ?  " Male" : " Female" 
+    }
     return (
         
         <div className="pl-2 w-20 flex-grow h-full grid grid-flow-col gap-2">
@@ -127,7 +128,7 @@ function FilterBar({
                 options={[
                         {text: "All", value: ""},
                         ...roomTypes.map(roomType => ({
-                            text: roomType.tenLoai,
+                            text: roomType.tenLoai+ gender(roomType.gioiTinh) ,
                             value: roomType.id,
                         }))
                 ]}
@@ -140,7 +141,7 @@ function FilterBar({
                     
                 }}
             />
-            <FilterSelection
+            {/* <FilterSelection
                 title="Gender"
                 options={[
                     {text: "All", value: ""},
@@ -153,7 +154,7 @@ function FilterBar({
                         gender: nextGender,
                     })
                 }}
-            />
+            /> */}
             
 
             <FilterSelection

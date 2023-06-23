@@ -3,7 +3,7 @@ import NavButton from '../ui/nav-button';
 import { faGear, faOutdent, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Authentication from "../../pages/api/student-auth/AuthService"
-import { studentURL, userURL } from "../utils/links";
+import { studentURL, userURL, managerURL } from "../utils/links";
 import { useRouter } from "next/router";
 
 
@@ -20,7 +20,7 @@ export default function Sidebar({
     function handleLogout(e){
         e.preventDefault()
         Authentication.logout()
-        router.push(userURL.login)
+        router.push(managerURL.login)
     }
 
     return (

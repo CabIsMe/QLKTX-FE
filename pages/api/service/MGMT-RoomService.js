@@ -67,28 +67,28 @@ const deleteRoom=(idRoom)=>{
 
 const createNewTypeRoom = (roomTypeModel)=>{
     const user = JSON.parse(localStorage.getItem('user'));
-    // if (user && user.token){
+    if (user && user.token){
         return axios.post(API_URL + "room-type/add", roomTypeModel,{
             headers: {
                 "Content-Type": "multipart/form-data",
-                // 'Authorization': user.token
+                'Authorization': user.token
               }
         })
-    // }
-    // return null
+    }
+    return null
 }
 
 const updateTypeRoom = (idType, roomTypeModel)=>{
     const user = JSON.parse(localStorage.getItem('user'));
-    // if (user && user.token){
+    if (user && user.token){
         return axios.put(API_URL + "room-type/update/"+idType, roomTypeModel,{
             headers: {
                 "Content-Type": "multipart/form-data",
-                // 'Authorization': user.token
+                'Authorization': user.token
               }
         })
-    // }
-    // return null
+    }
+    return null
 }
 
 const deleteTypeRoom = (idType)=>{

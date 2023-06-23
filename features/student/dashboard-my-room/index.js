@@ -1,26 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Container from "../../user/layouts/db-container";
 import RegisterSection from "./section-register";  
 import {SectionContext} from '../../utils/section.context';  
 import RoomDetailSection from "./section-room-detail";
-import StudentSerivce from "../../../pages/api/service/Contract-StudentService"
+import StudentService from "../../../pages/api/service/Contract-StudentService"
 import { useRouter } from "next/router";
 import {studentURL,userURL} from '../../utils/links'
+import { alertContext } from "../../utils/alert.context";
 
-
-export default function MyRoomDashboard() {
-    
+export default function MyRoomDashboard({}) {
     const router = useRouter();
     const [menuID, setMenuID] = useState(0);
     const [checkCondition, setCheckCondition] = useState(false)
     const [section, setSection] = useState(undefined)
     const [errorApi, setErrorApi]= useState(undefined)
+    const showAlert = useContext(alertContext);
+
     // const [studentDetails, setStudentDetails] = useState({})
     const menus = [
         {
             id: 0,
             text: "Room detail", 
-            section: <RoomDetailSection checkCondition={checkCondition} />,
+            section: <RoomDetailSection />,
         }, 
         {
             id: 1,
@@ -29,22 +30,12 @@ export default function MyRoomDashboard() {
         }
     ]   
     useEffect(()=>{
-        
-        StudentSerivce.checkForRegistration().then(res=>{
+        setSection(<RoomDetailSection/>)
+        StudentService.checkForRegistration().then(res=>{
             setErrorApi(false)
-            setSection(<RoomDetailSection checkCondition={res.data} />)
-            // if Time allowed for registration
-            if(res.data===true){
-                setCheckCondition(true)
-                setMenuID(nextID);
-            }
-            else{
-                setCheckCondition(false)
-                
-            }
+            setCheckCondition(res.data)
         }).catch((error)=>{
             if( error.response ){
-                
                 if(error.response.status===401){
                     router.push(userURL.login)
                 }
@@ -53,31 +44,22 @@ export default function MyRoomDashboard() {
                 setErrorApi(true)
             }
         })
+        
 
     },[])
+    
 
     function handleChangeMenu(nextID) {
-        // setMenuID(nextID);
-        StudentSerivce.checkForRegistration().then(res=>{
-
-            // if Time allowed for registration
-            if(res.data===true){
-                setCheckCondition(true)
-                setMenuID(nextID);
+        if(nextID==1){
+            if(checkCondition) {
+                setMenuID(nextID)
             }
-            else{
-                setCheckCondition(false)
-            }
-        }).catch((error)=>{
-            if( error.response ){
-                if(error.response.status===401){
-                    router.push(userURL.login)
-                }
-            }
-        })
+        }
+        else{
+            setMenuID(nextID);
+        }
         
     }
-    
     return (
         
         <SectionContext.Provider value={setSection}>
@@ -112,6 +94,8 @@ function MenuButton({
     checkCondition,
     handleChangeSection,
 }) {
+    const showAlert = useContext(alertContext);
+
     let classname = "w-40 h-14 grid place-items-center border-ec  border-2 rounded-tl-xl rounded-tr-xl bg-ec cursor-pointer";
     if (selected) 
         classname += " bg-white border-b-white"
@@ -120,10 +104,14 @@ function MenuButton({
         <div 
             className={classname}
             onClick={() => {
+                
                 handleChangeMenu(btn.id);
                 if(checkCondition===true){
                     handleChangeSection(btn.section);
                 }
+                else
+                    showAlert(false, 'Can only register 1 time')    
+                
                 // handleChangeMenu(btn.id);
                 // handleChangeSection(btn.section);
             }}>
